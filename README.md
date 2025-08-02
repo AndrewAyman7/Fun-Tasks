@@ -36,12 +36,10 @@ src
 │   ├── Controllers
 │   │   └── [DomainName]
 │   └── Middlewares
-│
 ├── BL                           # Business Logic
 │   └── [DomainName]
 │       ├── [Service]
 │       └── [DTOs]
-│
 ├── DAL                          # Data Access Layer
 │   ├── Repositories
 │   │   ├── [DomainName]Repository
