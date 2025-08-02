@@ -31,19 +31,22 @@ This project is a simple event scheduling application built with NestJS and Type
 
 i use this project structure : 
 
-├── src
-    ├── Web                          **Domain Controllers and Routes**
-        ├── Controllers
-            ├── [DomainName]
-        ├── Middlewares
-    ├── BL                           **Business Logic**
-        ├── [DomainName]
-            ├── [Service]
-            ├── [DTOs]
-    ├── DAL                          **Data Access Layer**
-        ├── Repositories
-            ├── [DomainName]Repository
-            ├── Generic             **Folder for generic implementations**
-        ├── Entities
-            ├── [Domains]
-        ├── Data                    **Folder for Migrations and Seeded Data**  , where to wrute the testing
+src
+├── Web                          # Domain Controllers and Routes
+│   ├── Controllers
+│   │   └── [DomainName]
+│   └── Middlewares
+│
+├── BL                           # Business Logic
+│   └── [DomainName]
+│       ├── [Service]
+│       └── [DTOs]
+│
+├── DAL                          # Data Access Layer
+│   ├── Repositories
+│   │   ├── [DomainName]Repository
+│   │   └── Generic              # Folder for generic implementations
+│   ├── Entities
+│   │   └── [Domains]
+│   └── Data                     # Folder for Migrations and Seeded Data
+
