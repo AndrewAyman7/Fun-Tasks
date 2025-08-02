@@ -1,0 +1,20 @@
+import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { DataSource } from 'typeorm';
+
+
+const baseConfig = {
+  type: 'postgres' as const,
+  host: process.env.DB_HOST || 'localhost',
+  port: parseInt(process.env.DB_PORT || '5432'),
+  username: process.env.DB_USERNAME || 'postgres',
+  password: process.env.DB_PASSWORD || 'postgres',
+  database: process.env.DB_NAME || 'funtasks',
+  entities: ['dist/DAL/Entities/**/*.js'],
+  migrations: ['dist/DAL/Data/Migrations/*.js'],
+  migrationsRun: false,
+  synchronize: false,
+};
+
+export const databaseConfig: TypeOrmModuleOptions = baseConfig;
+
+export const AppDataSource = new DataSource(baseConfig);

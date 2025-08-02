@@ -1,0 +1,243 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "FunTasks API",
+    "description": "A service for managing users and their scheduled events",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "Users",
+      "description": "User management endpoints"
+    },
+    {
+      "name": "Events",
+      "description": "Event scheduling and retrieval endpoints"
+    }
+  ],
+  "schemes": ["http"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "paths": {
+    "/users": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Register a new user",
+        "description": "Creates a new user and returns their UUID",
+        "consumes": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "User registration data",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Name of the user",
+                  "minLength": 1,
+                  "maxLength": 100,
+                  "example": "John Doe"
+                }
+              },
+              "required": ["name"]
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "User created successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "UUID of the created user",
+                  "example": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid input, e.g., missing or invalid name)"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/events/schedule": {
+      "post": {
+        "tags": ["Events"],
+        "summary": "Schedule a new event",
+        "description": "Creates a new event for a user with a specified execution time",
+        "consumes": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Event creation data",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Name of the event",
+                  "minLength": 1,
+                  "maxLength": 100,
+                  "example": "Test Event"
+                },
+                "executeAt": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "Execution date and time of the event (ISO 8601 format)",
+                  "example": "2025-08-03T03:08:00+03:00"
+                },
+                "userId": {
+                  "type": "string",
+                  "description": "UUID of the user scheduling the event",
+                  "example": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              },
+              "required": ["name", "executeAt", "userId"]
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Event created successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "UUID of the created event",
+                  "example": "550e8400-e29b-41d4-a716-446655440001"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Name of the event",
+                  "example": "Test Event"
+                },
+                "executeAt": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "Execution date and time (ISO 8601)",
+                  "example": "2025-08-03T00:08:00.000Z"
+                },
+                "status": {
+                  "type": "string",
+                  "enum": ["PENDING", "EXECUTED"],
+                  "description": "Status of the event",
+                  "example": "PENDING"
+                },
+                "executedAt": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "Execution completion time (if executed)",
+                  "example": null
+                },
+                "userId": {
+                  "type": "string",
+                  "description": "UUID of the user",
+                  "example": "550e8400-e29b-41d4-a716-446655440000"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid input, e.g., missing or invalid fields)"
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/events/users/{userId}": {
+      "get": {
+        "tags": ["Events"],
+        "summary": "Get all events for a user",
+        "description": "Retrieves all events associated with a specific user",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userId",
+            "type": "string",
+            "required": true,
+            "description": "UUID of the user",
+            "example": "550e8400-e29b-41d4-a716-446655440000"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of user events",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "description": "UUID of the event",
+                    "example": "550e8400-e29b-41d4-a716-446655440001"
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the event",
+                    "example": "Test Event"
+                  },
+                  "executeAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "Execution date and time (ISO 8601)",
+                    "example": "2025-08-03T00:08:00.000Z"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": ["PENDING", "EXECUTED"],
+                    "description": "Status of the event",
+                    "example": "PENDING"
+                  },
+                  "executedAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "Execution completion time (if executed)",
+                    "example": null
+                  },
+                  "userId": {
+                    "type": "string",
+                    "description": "UUID of the user",
+                    "example": "550e8400-e29b-41d4-a716-446655440000"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid userId format)"
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    }
+  }
+}
